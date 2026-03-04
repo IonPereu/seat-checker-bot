@@ -75,6 +75,8 @@ const USERS_FILE = "users.json";
     let successCount = 0;
     let errorCount = 0;
 
+    console.log(`📤 Trimit mesajul către ${usersData.users.length} utilizatori...`);
+
     for (const user of usersData.users) {
       try {
         await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -82,13 +84,16 @@ const USERS_FILE = "users.json";
           text: message
         });
         successCount++;
+        // Mică întârziere pentru a evita rate limiting (50ms între mesaje)
+        await new Promise(resolve => setTimeout(resolve, 50));
       } catch (error) {
         console.error(`Eroare la trimiterea mesajului către ${user.chatId}:`, error.message);
         errorCount++;
+        // Continuă chiar dacă un mesaj eșuează
       }
     }
 
-    console.log(`✅ Mesaje trimise: ${successCount} succes, ${errorCount} erori`);
+    console.log(`✅ Mesaje trimise: ${successCount} succes, ${errorCount} erori din ${usersData.users.length} total`);
   }
 
   fs.writeFileSync("last.json", JSON.stringify({ value: count }));

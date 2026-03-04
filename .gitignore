@@ -4,8 +4,8 @@
 
 # User data and sessions
 storage.json
-users.json
 last.json
+# users.json - хранится в репозитории для синхронизации между ботом и GitHub Actions
 
 # Node modules
 node_modules/
