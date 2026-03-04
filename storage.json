@@ -1,0 +1,133 @@
+{
+  "cookies": [
+    {
+      "name": "theme",
+      "value": "auto",
+      "domain": "iticket.md",
+      "path": "/",
+      "expires": 1804116706.435785,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "cf_clearance",
+      "value": "higcLHJE3L4CmD9PP55z1MgzEYeK9y.yglNyQh6e4VE-1772580704-1.2.1.1-lW04nkPCTqTLYYXjjvQ1iH2OeMasBXUGmOp5KPvV2gMD..NobwsSDXOf6.oALwyi0pPJd8W4ybU5LTZ5oKGd1bq0myLhtd_VtyAUKN0kLUCUuHtT5ciJwC9zonOkIM35SMBVNXGs2mR4IwFBlHqd0whhvyU8QqLeBW09hsU.lA6SZfVhivBkJb_yqquZtA_rl5CieF7acUsl.up459w7rsRsGVjYMUdi8hwzb7UGM8I",
+      "domain": ".iticket.md",
+      "path": "/",
+      "expires": 1804116704.16557,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None",
+      "partitionKey": "https://iticket.md",
+      "_crHasCrossSiteAncestor": false
+    },
+    {
+      "name": "_gcl_au",
+      "value": "1.1.673525285.1772580704",
+      "domain": ".iticket.md",
+      "path": "/",
+      "expires": 1780356704,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.1.732554979.1772580704",
+      "domain": ".iticket.md",
+      "path": "/",
+      "expires": 1807140706.030879,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_fbp",
+      "value": "fb.1.1772580704292.923847665163569913",
+      "domain": ".iticket.md",
+      "path": "/",
+      "expires": 1780356706,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "remember_site_59ba36addc2b2f9401580f014c7f58ea4e30989d",
+      "value": "eyJpdiI6Ik4rVzk1SFVsRGw0N010Z0c5S3hmVnc9PSIsInZhbHVlIjoiUU94blRkK0tpNjhRR010N0gyRU9IU0ZqenpieERWcW4vZUxtaktNQWZIc2dsTDBzaDFpcG5EbGUyYmJscVdqeXp4dThqYllwWndEb2lXY3JQTTNtVjdVcDUzTG1pWjUzSFZrai90enQ4WjBFZ3ExbVlSM3lHTysrQ3BWckdGc2VPdHRMYVZ3K0Qxc05nalZDTUNSa2RuNHRuU1cvcmx6YUw1bko2bmVZZkI0QU13U3BHYkNmamYvUzIxczYvQW9sUHRteXRWai9TejFNVnUvaDRWdTBxanVDMURnL3gzZHBHcW1rc2JrV0I1cz0iLCJtYWMiOiI4NGI1MjFkYmY3N2QwOWUyNjBjYjllZWVjYTFjYzdlYzk3NTBiM2Q4ZmFkNzIzMzQwMmM5Y2EyMmU1ODEyOWMxIiwidGFnIjoiIn0%3D",
+      "domain": ".iticket.md",
+      "path": "/",
+      "expires": 1807140705.136898,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "XSRF-TOKEN",
+      "value": "eyJpdiI6InFjYWIrVzk5QVlHa3dIdmM4Ti8zeGc9PSIsInZhbHVlIjoiR0ozcUV5eVNHeUh4SUpPYXVPdU9OSWRycGNDajFSdjB3TmoxNXcrUXYrUWwyYko4OHpISGdyRE9mUzRScUIrK3FTNU1OMUJYLzNGMHF2OExyZzJVRUh5QXRVczFZeWNLY0F0NHFvQno3NSttVEU4d0paaUlPdjNZc3JHNDlTVDkiLCJtYWMiOiI3ODIyZWZiNzhmMmI1Y2QwYjBlMWU3YzRkMmQyNThhNTA1NDQzYTQ3NzNmMWU1YmEyMjkzOGM5MjI5MmZhZDAwIiwidGFnIjoiIn0%3D",
+      "domain": ".iticket.md",
+      "path": "/",
+      "expires": 1773444705.701886,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "afKEXuIYktDo",
+      "value": "eyJpdiI6ImE4Y3ZIdEtxRXBHRUgzMUJBMW1sekE9PSIsInZhbHVlIjoiMldVQkpjaERCZktSeTZRZUlsaTE5Wnl0OEVPV0wvWlBCdWlEM3JDWjdKdm9QWVJTdzNSRnUwN3FTeHpmV0UyVHowMVRLbUVkbFBHY1BjTzVNOWJMMVpSSlg1RDZWMmlreXh1NHE5eHhuUEJuTmg5YTNNeXpYUzY4ZThsQ1d4SVEiLCJtYWMiOiJkMTJhMDE1YjJkOWQ3NWI5NWUwYzFiYTAxNjc4OWE0OThlMjBkNzIyNzVhNzk1Njg3ZDYzNTllNGI0M2Q5ZjUwIiwidGFnIjoiIn0%3D",
+      "domain": ".iticket.md",
+      "path": "/",
+      "expires": 1773444705.7021,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_R3ZX9H43WW",
+      "value": "GS2.1.s1772580704$o1$g1$t1772580706$j58$l0$h0",
+      "domain": ".iticket.md",
+      "path": "/",
+      "expires": 1807140706.029797,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "IDE",
+      "value": "AHWqTUlycnf6voP6DVIZdE1t9sHzPgRPsEJopZVUqM_hQgnxfEql1cW8IxJkRdnS",
+      "domain": ".doubleclick.net",
+      "path": "/",
+      "expires": 1807140706.125652,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://iticket.md",
+      "localStorage": [
+        {
+          "name": "theme",
+          "value": "auto"
+        },
+        {
+          "name": "lastExternalReferrer",
+          "value": "empty"
+        },
+        {
+          "name": "_gcl_ls",
+          "value": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"timeouts\":0,\"errors\":0,\"creationTimeMs\":1772580704208},\"expires\":1780356704208}}"
+        },
+        {
+          "name": "lastExternalReferrerTime",
+          "value": "1772580704277"
+        },
+        {
+          "name": "topicsLastReferenceTime",
+          "value": "1772580706832"
+        }
+      ]
+    }
+  ]
+}
