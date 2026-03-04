@@ -5,6 +5,11 @@ on:
     - cron: '*/10 * * * *'
   workflow_dispatch:
 
+# O singură rulare la un moment dat — evită două job-uri care scriu în cache și se suprascriu.
+concurrency:
+  group: seat-checker
+  cancel-in-progress: false
+
 jobs:
   check-seats:
     runs-on: ubuntu-latest
