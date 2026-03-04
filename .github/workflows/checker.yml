@@ -1,0 +1,33 @@
+name: Seat Checker
+
+on:
+  schedule:
+    # rulează la fiecare 30 minute
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # permite și rulare manuală
+
+jobs:
+  check-seats:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run checker
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          ELEMENT_XPATH: ${{ secrets.ELEMENT_XPATH }}
+          SITE_EMAIL: ${{ secrets.SITE_EMAIL }}
+          SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: node checker.js
