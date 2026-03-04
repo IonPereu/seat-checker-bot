@@ -59,10 +59,9 @@ const ELEMENT_XPATH = process.env.ELEMENT_XPATH;
     message += `📊 Prima verificare`;
   }
 
-  // Trimite mesajul în grup
-  if (!CHAT_ID) {
-    console.log("⚠️ CHAT_ID lipsește. Mesajul nu va fi trimis.");
-  } else {
+  // Trimite mesajul în grup doar când diferența e diferită de zero (sau la prima verificare)
+  const shouldSend = difference === null || difference !== 0;
+  if (shouldSend && CHAT_ID) {
     try {
       await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         chat_id: CHAT_ID,
@@ -72,6 +71,10 @@ const ELEMENT_XPATH = process.env.ELEMENT_XPATH;
     } catch (error) {
       console.error("❌ Eroare la trimiterea mesajului în grup:", error.message);
     }
+  } else if (!shouldSend) {
+    console.log("⏭️ Diferență 0, mesajul nu a fost trimis.");
+  } else if (!CHAT_ID) {
+    console.log("⚠️ CHAT_ID lipsește. Mesajul nu va fi trimis.");
   }
 
   fs.writeFileSync("last.json", JSON.stringify({ value: count }));
