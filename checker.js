@@ -38,20 +38,39 @@ const ELEMENT_XPATH = process.env.ELEMENT_XPATH;
 
   console.log("Număr elemente:", count);
 
+  // --- ORDINEA OPERAȚIILOR ---
+  // 1. CITIRE: valoarea din rularea precedentă (last.json restaurat din cache în Actions)
   let lastValue = null;
   if (fs.existsSync("last.json")) {
-    lastValue = JSON.parse(fs.readFileSync("last.json")).value;
+    try {
+      const parsed = JSON.parse(fs.readFileSync("last.json", "utf8"));
+      const val = parsed?.value;
+      if (typeof val === "number" && !Number.isNaN(val)) {
+        lastValue = val;
+      }
+    } catch (e) {
+      console.warn("last.json invalid sau lipsă, se consideră prima verificare:", e.message);
+    }
   }
 
+  // 2. Calculează diferența: null = prima verificare, 0 = neschimbat, != 0 = s-a schimbat
   let difference = null;
   if (lastValue !== null) {
     difference = count - lastValue;
   }
 
-  // Formează mesajul
+  const isFirstRun = difference === null;
+  const hasChange = difference !== 0;
+  const shouldSend = isFirstRun || hasChange;
+
+  // Log clar pentru debug (în Actions sau local)
+  console.log(
+    `📋 lastValue=${lastValue ?? "lipsă"} | count=${count} | difference=${difference ?? "primă verificare"} | trimite mesaj=${shouldSend}`
+  );
+
+  // 3. Formează mesajul (întotdeauna, pentru cazurile când îl trimitem)
   let message = `📍 URL: ${SITE_URL}\n`;
   message += `🪑 Locuri ocupate: ${count}\n`;
-  
   if (difference !== null) {
     const diffSign = difference > 0 ? "+" : "";
     message += `📊 Diferență: ${diffSign}${difference} (${lastValue} → ${count})`;
@@ -59,8 +78,7 @@ const ELEMENT_XPATH = process.env.ELEMENT_XPATH;
     message += `📊 Prima verificare`;
   }
 
-  // Trimite mesajul în grup doar când diferența e diferită de zero (sau la prima verificare)
-  const shouldSend = difference === null || difference !== 0;
+  // 4. Trimite mesajul DOAR când: prima verificare SAU diferența e != 0
   if (shouldSend && CHAT_ID) {
     try {
       await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -70,6 +88,9 @@ const ELEMENT_XPATH = process.env.ELEMENT_XPATH;
       console.log("✅ Mesaj trimis cu succes în grup!");
     } catch (error) {
       console.error("❌ Eroare la trimiterea mesajului în grup:", error.message);
+      if (error.response?.data) {
+        console.error("   Răspuns API:", JSON.stringify(error.response.data));
+      }
     }
   } else if (!shouldSend) {
     console.log("⏭️ Diferență 0, mesajul nu a fost trimis.");
@@ -77,6 +98,8 @@ const ELEMENT_XPATH = process.env.ELEMENT_XPATH;
     console.log("⚠️ CHAT_ID lipsește. Mesajul nu va fi trimis.");
   }
 
+  // 5. SALVARE: scriem count curent în last.json ACUM (după trimiterea mesajului).
+  //    În Actions, la sfârșitul job-ului cache-ul salvează acest fișier pentru următoarea rulare.
   fs.writeFileSync("last.json", JSON.stringify({ value: count }));
 
   await browser.close();
