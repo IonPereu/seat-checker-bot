@@ -62,16 +62,15 @@ const LAST_STATE_FILE = ".seat-checker-state/last.json";
     difference = count - lastValue;
   }
 
-  const isFirstRun = difference === null;
-  const hasChange = difference !== 0;
-  const shouldSend = isFirstRun || hasChange;
+  // Mesaj doar când numărul s-a schimbat (difference !== 0). Fără mesaj la prima verificare sau când e 0.
+  const shouldSend = difference !== null && difference !== 0;
 
   // Log clar pentru debug (în Actions sau local)
   console.log(
     `📋 lastValue=${lastValue ?? "lipsă"} | count=${count} | difference=${difference ?? "primă verificare"} | trimite mesaj=${shouldSend}`
   );
 
-  // 3. Formează mesajul (întotdeauna, pentru cazurile când îl trimitem)
+  // 3. Formează mesajul (doar pentru cazurile când îl trimitem)
   let message = `📍 URL: ${SITE_URL}\n`;
   message += `🪑 Locuri ocupate: ${count}\n`;
   if (difference !== null) {
@@ -81,7 +80,7 @@ const LAST_STATE_FILE = ".seat-checker-state/last.json";
     message += `📊 Prima verificare`;
   }
 
-  // 4. Trimite mesajul DOAR când: prima verificare SAU diferența e != 0
+  // 4. Trimite mesajul DOAR când numărul s-a schimbat (difference !== 0)
   if (shouldSend && CHAT_ID) {
     try {
       await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -96,7 +95,7 @@ const LAST_STATE_FILE = ".seat-checker-state/last.json";
       }
     }
   } else if (!shouldSend) {
-    console.log("⏭️ Diferență 0, mesajul nu a fost trimis.");
+    console.log("⏭️ Numărul neschimbat (primă verificare sau diferență 0), mesajul nu a fost trimis.");
   } else if (!CHAT_ID) {
     console.log("⚠️ CHAT_ID lipsește. Mesajul nu va fi trimis.");
   }
