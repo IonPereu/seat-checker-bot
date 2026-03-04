@@ -6,6 +6,7 @@
 storage.json
 users.json
 last.json
+.seat-checker-state/
 
 # Node modules
 node_modules/

@@ -8,6 +8,9 @@ const CHAT_ID = process.env.CHAT_ID;
 const SITE_URL = process.env.SITE_URL;
 const ELEMENT_XPATH = process.env.ELEMENT_XPATH;
 
+// Același path ca în workflow (cache .seat-checker-state/) — în Actions se restaurează din cache.
+const LAST_STATE_FILE = ".seat-checker-state/last.json";
+
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ storageState: "storage.json" });
@@ -39,11 +42,11 @@ const ELEMENT_XPATH = process.env.ELEMENT_XPATH;
   console.log("Număr elemente:", count);
 
   // --- ORDINEA OPERAȚIILOR ---
-  // 1. CITIRE: valoarea din rularea precedentă (last.json restaurat din cache în Actions)
+  // 1. CITIRE: valoarea din rularea precedentă (din .seat-checker-state/last.json, restaurat din cache în Actions)
   let lastValue = null;
-  if (fs.existsSync("last.json")) {
+  if (fs.existsSync(LAST_STATE_FILE)) {
     try {
-      const parsed = JSON.parse(fs.readFileSync("last.json", "utf8"));
+      const parsed = JSON.parse(fs.readFileSync(LAST_STATE_FILE, "utf8"));
       const val = parsed?.value;
       if (typeof val === "number" && !Number.isNaN(val)) {
         lastValue = val;
@@ -98,9 +101,13 @@ const ELEMENT_XPATH = process.env.ELEMENT_XPATH;
     console.log("⚠️ CHAT_ID lipsește. Mesajul nu va fi trimis.");
   }
 
-  // 5. SALVARE: scriem count curent în last.json ACUM (după trimiterea mesajului).
-  //    În Actions, la sfârșitul job-ului cache-ul salvează acest fișier pentru următoarea rulare.
-  fs.writeFileSync("last.json", JSON.stringify({ value: count }));
+  // 5. SALVARE: scriem count curent în .seat-checker-state/last.json (după trimiterea mesajului).
+  //    În Actions, pasul "Save last value" salvează acest director în cache pentru următoarea rulare.
+  const stateDir = ".seat-checker-state";
+  if (!fs.existsSync(stateDir)) {
+    fs.mkdirSync(stateDir, { recursive: true });
+  }
+  fs.writeFileSync(LAST_STATE_FILE, JSON.stringify({ value: count }));
 
   await browser.close();
 })();

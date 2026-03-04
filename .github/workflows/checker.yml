@@ -29,17 +29,27 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install
 
-      # Restaurăm last.json din cache (valoarea salvată la SFÂRȘITUL rulării precedente).
-      # Fără acest pas, last.json nu există pe runner → scriptul consideră "primă verificare".
+      - name: Create state directory
+        run: mkdir -p .seat-checker-state
+
+      # Restaurăm valoarea din rularea precedentă (cache pe director, mai fiabil decât un singur fișier).
       - name: Restore last value from previous run
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
-          path: last.json
+          path: .seat-checker-state
           key: seat-checker-last-value
 
-      # 1) Citește last.json (valoarea precedentă)  2) Compară cu count de pe site
+      - name: Show restored state (debug)
+        run: |
+          if [ -f .seat-checker-state/last.json ]; then
+            echo "📂 Restaurat din cache: $(cat .seat-checker-state/last.json)";
+          else
+            echo "📂 Nu există cache (primă rulare sau cache lipsă)";
+          fi
+
+      # 1) Citește .seat-checker-state/last.json  2) Compară cu count de pe site
       # 3) Trimite mesaj doar dacă difference != 0 (sau primă verificare)
-      # 4) La sfârșit scrie last.json cu count curent → cache îl salvează după job
+      # 4) Scrie count curent în .seat-checker-state/last.json
       - name: Run checker
         env:
           SITE_URL: ${{ secrets.SITE_URL }}
@@ -49,3 +59,10 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: node checker.js
+
+      # Salvăm explicit valoarea pentru următoarea rulare (pas separat = ordine garantată).
+      - name: Save last value for next run
+        uses: actions/cache/save@v4
+        with:
+          path: .seat-checker-state
+          key: seat-checker-last-value
