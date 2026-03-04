@@ -4,9 +4,9 @@ const axios = require("axios");
 const fs = require("fs");
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
+const CHAT_ID = process.env.CHAT_ID;
 const SITE_URL = process.env.SITE_URL;
 const ELEMENT_XPATH = process.env.ELEMENT_XPATH;
-const USERS_FILE = "users.json";
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -59,41 +59,19 @@ const USERS_FILE = "users.json";
     message += `📊 Prima verificare`;
   }
 
-  // Trimite mesajul tuturor utilizatorilor înregistrați
-  let usersData = { users: [] };
-  if (fs.existsSync(USERS_FILE)) {
-    try {
-      usersData = JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
-    } catch (error) {
-      console.error("Eroare la citirea users.json:", error.message);
-    }
-  }
-
-  if (usersData.users.length === 0) {
-    console.log("⚠️ Nu există utilizatori înregistrați. Mesajul nu va fi trimis.");
+  // Trimite mesajul în grup
+  if (!CHAT_ID) {
+    console.log("⚠️ CHAT_ID lipsește. Mesajul nu va fi trimis.");
   } else {
-    let successCount = 0;
-    let errorCount = 0;
-
-    console.log(`📤 Trimit mesajul către ${usersData.users.length} utilizatori...`);
-
-    for (const user of usersData.users) {
-      try {
-        await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-          chat_id: user.chatId,
-          text: message
-        });
-        successCount++;
-        // Mică întârziere pentru a evita rate limiting (50ms între mesaje)
-        await new Promise(resolve => setTimeout(resolve, 50));
-      } catch (error) {
-        console.error(`Eroare la trimiterea mesajului către ${user.chatId}:`, error.message);
-        errorCount++;
-        // Continuă chiar dacă un mesaj eșuează
-      }
+    try {
+      await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        chat_id: CHAT_ID,
+        text: message
+      });
+      console.log("✅ Mesaj trimis cu succes în grup!");
+    } catch (error) {
+      console.error("❌ Eroare la trimiterea mesajului în grup:", error.message);
     }
-
-    console.log(`✅ Mesaje trimise: ${successCount} succes, ${errorCount} erori din ${usersData.users.length} total`);
   }
 
   fs.writeFileSync("last.json", JSON.stringify({ value: count }));
