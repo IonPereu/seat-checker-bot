@@ -32,12 +32,14 @@ jobs:
       - name: Create state directory
         run: mkdir -p .seat-checker-state
 
-      # Restaurăm valoarea din rularea precedentă (cache pe director, mai fiabil decât un singur fișier).
+      # Restaurăm ultima valoare salvată (prefix match = ultimul cache creat; cheie unică per run evită "another job may be creating this cache").
       - name: Restore last value from previous run
         uses: actions/cache/restore@v4
         with:
           path: .seat-checker-state
-          key: seat-checker-last-value
+          key: seat-checker-last-value-${{ github.run_id }}
+          restore-keys: |
+            seat-checker-last-value-
 
       - name: Show restored state (debug)
         run: |
@@ -60,9 +62,9 @@ jobs:
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: node checker.js
 
-      # Salvăm explicit valoarea pentru următoarea rulare (pas separat = ordine garantată).
+      # Salvăm cu cheie unică per rulare → nicio conflictare cu alt job.
       - name: Save last value for next run
         uses: actions/cache/save@v4
         with:
           path: .seat-checker-state
-          key: seat-checker-last-value
+          key: seat-checker-last-value-${{ github.run_id }}
