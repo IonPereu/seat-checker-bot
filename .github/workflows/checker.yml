@@ -2,9 +2,8 @@ name: Seat Checker
 
 on:
   schedule:
-    # rulează la fiecare 30 minute
     - cron: '*/30 * * * *'
-  workflow_dispatch: # permite și rulare manuală
+  workflow_dispatch:
 
 jobs:
   check-seats:
@@ -21,6 +20,9 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Install Playwright browsers
+        run: npx playwright install
 
       - name: Run checker
         env:
