@@ -15,7 +15,6 @@ const ELEMENT_XPATH = process.env.ELEMENT_XPATH;
 
   await page.goto(SITE_URL);
 
-  // 🔹 Retry până la 3 ori dacă elementele nu există
   let count = 0;
   let found = false;
   for (let i = 0; i < 3; i++) {
@@ -44,11 +43,31 @@ const ELEMENT_XPATH = process.env.ELEMENT_XPATH;
     lastValue = JSON.parse(fs.readFileSync("last.json")).value;
   }
 
-  if (lastValue !== null && lastValue !== count) {
+  let difference = null;
+  if (lastValue !== null) {
+    difference = count - lastValue;
+  }
+
+  // Formează mesajul
+  let message = `📍 URL: ${SITE_URL}\n`;
+  message += `🪑 Locuri ocupate: ${count}\n`;
+  
+  if (difference !== null) {
+    const diffSign = difference > 0 ? "+" : "";
+    message += `📊 Diferență: ${diffSign}${difference} (${lastValue} → ${count})`;
+  } else {
+    message += `📊 Prima verificare`;
+  }
+
+  // Trimite mesajul la fiecare rulare
+  try {
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       chat_id: CHAT_ID,
-      text: `⚠️ Schimbare detectată!\nVeche: ${lastValue}\nNouă: ${count}`
+      text: message
     });
+    console.log("Mesaj trimis cu succes!");
+  } catch (error) {
+    console.error("Eroare la trimiterea mesajului:", error.message);
   }
 
   fs.writeFileSync("last.json", JSON.stringify({ value: count }));
